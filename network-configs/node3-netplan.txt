@@ -1,0 +1,9 @@
+# Example of /etc/netplan/01-netcfg.yaml for Node3
+
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: no
+      addresses: [192.168.10.103/24]
+      gateway4: 192.168.10.101

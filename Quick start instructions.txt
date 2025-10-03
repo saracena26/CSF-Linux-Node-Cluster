@@ -1,0 +1,15 @@
+Clone the repository:
+    git clone https://github.com/<your-username>/linux-node-cluster.git
+    cd linux-node-cluster
+
+Make the setup scripts executable:
+    chmod +x setup-scripts/*.sh
+
+Run setup scripts on each node:
+    ./setup-scripts/node1-setup.sh
+    ./setup-scripts/node2-setup.sh
+    ./setup-scripts/node3-setup.sh
+
+Verify network connectivity:
+    ping 192.168.10.102  # from Node1 repeat same steps for other nodes
+    ping 192.168.10.103

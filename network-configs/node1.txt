@@ -1,0 +1,9 @@
+Node1 (Master / Gateway)
+
+- Adapter 1: NAT (dynamic IP via VirtualBox) → Internet access
+- Adapter 2: Internal Network (ClusterNet) → Cluster LAN
+
+Internal Network IP: 192.168.10.101/24
+Notes:
+- Only Node1 has internet access
+- Node1 is the golden/master node

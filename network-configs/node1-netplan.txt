@@ -1,0 +1,10 @@
+# Example of /etc/netplan/01-netcfg.yaml for Node1
+
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true   # NAT adapter
+    enp0s8:
+      dhcp4: no
+      addresses: [192.168.10.101/24]
