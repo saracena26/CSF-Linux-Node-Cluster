@@ -2,6 +2,11 @@
 
 ## Overview
 This project documents how to set up a small Linux node cluster using **Ubuntu Server** and VirtualBox.  
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/saracena26/CSF-Linux-Node-Cluster)](https://github.com/saracena26/CSF-Linux-Node-Cluster/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/saracena26/CSF-Linux-Node-Cluster)](https://github.com/saracena26/CSF-Linux-Node-Cluster/commits/main)
+
 The repository contains:
 
 - `network-configs/`: Example IP and network settings for each node  
@@ -25,8 +30,18 @@ linux-node-cluster/
 ├─ LICENSE # MIT license for reuse
 ```
 ---
+## 📦 Repository Setup (Clone + Permissions)
 
 ## Cluster Network Setup
+
+If you're pulling this project directly from GitHub, start by cloning it:
+
+- `git clone https://github.com/saracena26/CSF-Linux-Node-Cluster.git`
+- `cd CSF-Linux-Node-Cluster`
+
+Make sure all setup scripts are executable:
+
+- `chmod +x setup-scripts/*.sh`
 
 **Node1 (Master / Gateway)**  
 - Ubuntu Server (no GUI)  
@@ -42,6 +57,7 @@ linux-node-cluster/
   - Node3 → 192.168.10.103/24  
 
 > All three nodes can communicate over the internal network. Master Node has internet access through NAT.
+
 ## 🖥️ Cluster Overview
 ```
            +--------------------+
@@ -51,6 +67,8 @@ linux-node-cluster/
             +------------------+
             |    Master Node   |
             |       (NAT)      |
+            |     eth0: WAN    |
+            |     eth1: LAN    |
             +--------+---------+
                      |
              [Internal Network]
@@ -58,7 +76,7 @@ linux-node-cluster/
            |                     |
    +----------------+     +----------------+
    |   Worker Node1 |     |   Worker Node2 |
-   |   (LAN only)   |     |    (LAN only)  |
+   |   eth0: LAN    |     |    eth0: LAN   |
    +----------------+     +----------------+
 ```
 
