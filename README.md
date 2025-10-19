@@ -1,7 +1,7 @@
-# Linux Node Cluster (VirtualBox Setup)
+# 🧩 Linux Node Cluster (VirtualBox Setup)
 
 ## Overview
-This project documents how to set up a small Linux node cluster using **Ubuntu 24.04.3 LTS (Noble Numbat)** and VirtualBox.  
+This project documents how to set up a small Linux node cluster using **Ubuntu Server** and VirtualBox.  
 The repository contains:
 
 - `network-configs/`: Example IP and network settings for each node  
@@ -15,18 +15,15 @@ No VM images are included to keep the repository lightweight.
 
 ---
 
-## Project Structure
-
+## 🧱 Project Structure
+```
 linux-node-cluster/
 ├─ network-configs/ # Node IPs and netplan YAML examples
 ├─ setup-scripts/ # Bash scripts to configure nodes
 ├─ README.md # Project documentation
 ├─ .gitignore # Prevents uploading large/unnecessary files
 ├─ LICENSE # MIT license for reuse
-
-Example of yaml file
-
-
+```
 ---
 
 ## Cluster Network Setup
@@ -34,51 +31,53 @@ Example of yaml file
 **Node1 (Master / Gateway)**  
 - Ubuntu Server (no GUI)  
 - Adapter 1: NAT (dynamic IP via VirtualBox) → Internet access  
-- Adapter 2: Internal Network (`ClusterNet`) → Cluster LAN  
+- Adapter 2: Internal Network (`ExampleNet`) → Cluster LAN  
 - Internal Network IP: 192.168.10.101/24 *(example; can be changed)*  
 
 **Node2 & Node3 (Workers)**  
-- Adapter 1: Internal Network (`ClusterNet`) → Cluster LAN only  
+- Adapter 1: Internal Network (`ExampleNet`) → Cluster LAN only  
 - No internet access  
 - Internal Network IPs *(examples; can be changed)*:  
   - Node2 → 192.168.10.102/24  
   - Node3 → 192.168.10.103/24  
 
-> All three nodes can communicate over the internal network. Node1 has internet access through NAT.
+> All three nodes can communicate over the internal network. Master Node has internet access through NAT.
+## 🖥️ Cluster Overview
+```
+           +--------------------+
+           |      Internet      |
+           +---------+----------+
+                     |
+            +------------------+
+            |    Master Node   |
+            |       (NAT)      |
+            +--------+---------+
+                     |
+             [Internal Network]
+           +----------+----------+
+           |                     |
+   +----------------+     +----------------+
+   |   Worker Node1 |     |   Worker Node2 |
+   |   (LAN only)   |     |    (LAN only)  |
+   +----------------+     +----------------+
+```
 
 ---
 
-     +-----------------+
-     |     Node1       |
-     | Master / Gateway|
-     | 192.168.10.101  |
-     +--------+--------+
-              |
-      ClusterNet Internal
-              |
-     +--------+--------+
-     |                 |
- +---+---+         +---+---+
- | Node2 |         | Node3 |
- | 102   |         | 103   |
- +-------+         +-------+
+## 🌐 Network Config Documentation
 
-
----
-
-## Network Config Documentation
-
-All internal IP addresses and netplan YAML examples are provided in `network-configs/`:
-
+All internal IP addresses and netplan YAML examples are provided in the network-configs/ folder:
+```
 network-configs/
-├─ node1.txt # Node1 overview
-├─ node1-netplan.txt # Node1 netplan YAML example
-├─ node2.txt # Node2 overview
-├─ node2-netplan.txt # Node2 netplan YAML example
-├─ node3.txt # Node3 overview
-├─ node3-netplan.txt # Node3 netplan YAML example
+├─ node1.txt             # Node1 overview
+├─ node1-netplan.txt     # Node1 netplan YAML example
+├─ node2.txt             # Node2 overview
+├─ node2-netplan.txt     # Node2 netplan YAML example
+├─ node3.txt             # Node3 overview
+├─ node3-netplan.txt     # Node3 netplan YAML example
+```
 
-## Setup Scripts
+## ⚙️ Setup Scripts
 
 Each node has a setup script to automate configuration:
 
@@ -86,54 +85,53 @@ Each node has a setup script to automate configuration:
 - `node2-setup.sh` → Worker node setup  
 - `node3-setup.sh` → Worker node setup  
 
-### Make scripts executable
+## 1️⃣ Make Scripts Executable
 
 After cloning the repository, run:
+`chmod +x setup-scripts/*.sh`
 
-```bash
-chmod +x setup-scripts/*.sh
-
-How to run
+## 2️⃣ How to Run
 
 For Node1 (Master): 
 
-cd setup-scripts
-./node1-setup.sh
+`cd setup-scripts
+./node1-setup.sh`
 
 Repeat the same for Nodes 2 and 3
 
-cd setup-scripts
-./node2-setup.sh
-cd setup-scripts
-./node3-setup.sh
+- `cd setup-scripts
+./node2-setup.sh`
 
-Verify setup
+- `cd setup-scripts
+./node3-setup.sh`
+
+## 3️⃣ Verify Setup
 
 Check internal IPs:
-ip addr show
+
+`ip addr show`
 
 Test connectivity between nodes:
-ping 192.168.10.101  # Node2 or Node3 ping Node1
-ping 192.168.10.102  # Node1 or Node3 ping Node2
-ping 192.168.10.103  # Node1 or Node2 ping Node3
-Note: Node2 and Node3 have no internet by default; only Node1 can access NAT.
+- `ping 192.168.10.101`  # Node2 or Node3 ping Node1
+- `ping 192.168.10.102`  # Node1 or Node3 ping Node2
+- `ping 192.168.10.103`  # Node1 or Node2 ping Node3
+> ⚠️ Note: Node2 and Node3 have no internet by default; only Node1 can access NAT.
 
-Node1 as the Golden Node
+## 4️⃣ Node1 as the Golden/Master Node
 
-Node1 is the "golden/master" VM.
+Node1 is the “golden/master” VM.
 
-All updates, package installations, and configuration changes should be applied here first.
-
-Node2 and Node3 can then be cloned from Node1 to ensure consistency.
+* All updates, package installations, and configuration changes should be applied here first.
+* Node2 and Node3 can then be cloned from Node1 to ensure consistency.
 
 Cloning Steps
 
-Shut down Node1 after updates.
+1. Shut down Node1 after updates.
 
-Right-click Node1 → Clone → choose Full clone.
+2. Right-click Node1 → Clone → choose Full clone.
+   
+3. Name the clones Node2 and Node3.
 
-Name the clones Node2 and Node3.
+4. Start each cloned VM and update its internal network IP according to `network-configs/.`
 
-Start each cloned VM and update its internal network IP according to network-configs/.
-
-Verify connectivity between all nodes.
+5. Verify connectivity between all nodes.
